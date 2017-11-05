@@ -9,7 +9,7 @@ def plotDict(plotName, figName, ylabel, xlabel, dictionary, time):
 	plt.ylabel(ylabel)
 	for key, value in dictionary.iteritems():
 		plt.plot(time, value, label = key)
-	plt.axis([0,40,-1,40])
+	plt.axis([0,40,0,40])
 	plt.legend(loc="upper right", prop={'size': 5})
 	f.savefig(figName)
 
@@ -58,5 +58,6 @@ def plotPerConfig(configurationsFolder):
 # ubuntu
 plotsPath_exp12 = "/home/vshejwalkar/Dropbox/UMass/Amir H/Location Privacy/Synthetic Data Generation/Geolife Trajectories 1.3/sltgTF_exp1/sltgTF_exp1.2/"
 plotsPath_exp11 = "/home/vshejwalkar/Dropbox/UMass/Amir H/Location Privacy/Synthetic Data Generation/Geolife Trajectories 1.3/sltgTF_exp1/sltgTF_exp1.1/"
+# configurationsFolder = "fakes_5_84_225_250/"
 configurationsFolder = "fakes_5_40_40_40.1/"
 plotPerConfig(configurationsFolder)
