@@ -44,6 +44,10 @@ def result_size_utility(seed, fake, trace1):
 		number_of_commons += (len(list(set(final_places[seed[i]]).intersection(final_places[fake[i]], final_places[trace1[i]]))))/len(fake)
 	return number_of_commons
 
+# convert user trace files to trace lists to pass to result_size_utility() function
+def user_traces(user_traces_path):
+	pass
+
 # places(location_file_path, 1000, 'cafe', '')
 # common_places = common_places(final_places)
 
