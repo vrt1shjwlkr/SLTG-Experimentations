@@ -115,8 +115,8 @@ def inputMobility(numUniqueLocations):
 		string = ''
 		for j in range(numUniqueLocations - 1):
 			# print i, j
-			string += str(random.randint(0,1)) + ','
-		string += str(random.randint(0,1))+'\n'
+			string += str(1) + ','
+		string += str(1)+'\n'
 		lf.write(string)
 
 def extractLPMData(datatDir, regions):	
@@ -322,6 +322,6 @@ def fakeSeedGen(datatDir):
 	userID = 1
 	totalLoc = 250
 	
-extractLPMData(datatDir, 15)
+# extractLPMData(datatDir, 15)
 # locationTraceGenerator(datatDir)
-# inputMobility(250)
+inputMobility(250)
