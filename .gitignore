@@ -1,6 +1,5 @@
 # exclude everything from data and sltgTF_exp1
 Data/*
-sltgTF_exp1/*
 sltg_exp1/*
 sltg_exp2/*
 sltg_exp3/*

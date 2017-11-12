@@ -48,3 +48,4 @@ class trace:
 		self.displacement += ((result.get('rows')[0].get('elements')[0].get('distance').get('value')))
 
 	def calcMarkovMat(self):
+		pass
