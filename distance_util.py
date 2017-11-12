@@ -64,6 +64,8 @@ def get_seeds(input_trace, num_of_users, num_timestamps):
 def calculate_metrics():
 	with open('results.csv', 'w') as rf:
 		rf_writer = csv.writer(rf)
+		header = ['experiment', 'num of users', 'trace length', 'max location in trace', 'max location allowed', 'Clusters', 'GLRP', 'MP', 'ALRP', 'VF', 'User', 'fake trace num','Generic Util', 'Seed distance', 'Trace distance', 'Surge factor']
+		rf_writer.writerow(header)
 		for folder in sorted(os.listdir(experiment1_files)):
 			print folder
 			config = folder.split('_')
@@ -85,18 +87,21 @@ def calculate_metrics():
 					for i in range(len(seeds)):
 						print 'calculating metrics for configurate {} user {}'.format(row_to_csv, i+1)
 						seed = seeds[i]
+						seed_distance_covered = trace_distance(seed)
 						# fetching fakes
 						for j in range(len(fakes.get(i+1))):
 							fake = fakes.get(i+1)[j]
 							gen_distance = distance_bw_traces(seed, fake)
 							distance_covered = trace_distance(fake)
 							surge = surge_factor(fake, int(config[2]), locations_per_time, int(config[1]))
+							row_to_csv.append(i+1)
+							row_to_csv.append(j)
 							row_to_csv.append(gen_distance)
+							row_to_csv.append(seed_distance_covered)
 							row_to_csv.append(distance_covered)
 							row_to_csv.append(surge)
-							print row_to_csv
 							rf_writer.writerow(row_to_csv)
-							row_to_csv = row_to_csv[:-3]
+							row_to_csv = row_to_csv[:-6]
 		# break
 
 calculate_metrics()
