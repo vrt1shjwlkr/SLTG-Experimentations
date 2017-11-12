@@ -3,3 +3,6 @@ Data/*
 sltg_exp1/*
 sltg_exp2/*
 sltg_exp3/*
+*.csv
+*.csv#
+*.pyc

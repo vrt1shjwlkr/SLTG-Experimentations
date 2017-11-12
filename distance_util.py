@@ -1,6 +1,8 @@
 # given a seed and a fake trace calculate the generic utility of the 
 # fake trace
-import simpy, os, datetime, random, simplejson, urllib
+from __future__ import division
+import simpy, os, datetime, random, simplejson, urllib, csv
+from surge_util import *
 
 # UbuntuPath
 experiment1_files = '/home/vshejwalkar/Documents/Synthetic Data Generation/Geolife Trajectories 1.3/sltg_exp1/'
@@ -13,12 +15,13 @@ def distance_bw_traces(seed, fake):
 	gen_distance = 0
 	for i in range (len(seed)):
 		gen_distance += (distance_matrix[seed[i]-1][fake[i]-1])/len(seed)
+		gen_distance = round(gen_distance, 3)
 	return gen_distance
 
 def trace_distance(fake):
 	distance_covered = 0
 	for i in range(len(fake)-1):
-		distance_covered += distance_matrix[fake[i]][fake[i+1]]
+		distance_covered += distance_matrix[fake[i]-1][fake[i+1]-1]
 	return distance_covered
 
 def get_fakes(experiment_path, files_path, folder_name):
@@ -59,35 +62,41 @@ def get_seeds(input_trace, num_of_users, num_timestamps):
 		return seed
 
 def calculate_metrics():
-	for folder in sorted(os.listdir(experiment1_files)):
-		config = folder.split('_')
-		for config_path in sorted(os.listdir(experiment1_files + folder + '/')):
-			seeds = []
-			# exp_num, num_of_users, num_timestamps, num_locations_in_trace, num_allowed_locations
-			row_to_csv = []
-			fakes = {}
-			if config_path.startswith('out_'):
-				row_to_csv = [experiment1_files.split('/')[-2], config[1], config[2], config[3], config[4], config[5]]
-				row_to_csv.append(config_path.split('_')[1]) # GLRP				
-				row_to_csv.append(config_path.split('_')[2]) # MP
-				row_to_csv.append(config_path.split('_')[3]) # ALRP
-				row_to_csv.append(config_path.split('_')[4]) # Viterbi factor
-				seeds,fakes = get_fakes(experiment1_files, folder, config_path)
-			
-			for i in range(len(seeds)):
-				print 'calculating metrics for configurate {} user {}'.format(row_to_csv, i+1)
-				seed = seeds[i]
-				# fetching fakes
-				for j in range(len(fakes.get(i+1))):
-					csv_row = []
-					csv_row = row_to_csv
-					fake = fakes.get(i+1)[j]
-					print seed, fake
-					gen_distance = distance_bw_traces(seed, fake)
-					distance_covered = trace_distance(fake)
-					csv_row.append(gen_distance)
-					csv_row.append(distance_covered)
-					print csv_row
-		break
+	with open('results.csv', 'w') as rf:
+		rf_writer = csv.writer(rf)
+		for folder in sorted(os.listdir(experiment1_files)):
+			print folder
+			config = folder.split('_')
+			for config_path in sorted(os.listdir(experiment1_files + folder + '/')):
+				seeds = []
+				fakes = {}
+				if config_path.startswith('out_'):
+					# exp_num, num_of_users, num_timestamps, num_locations_in_trace, num_allowed_locations
+					row_to_csv = []
+					row_to_csv = [experiment1_files.split('/')[-2], config[1], config[2], config[3], config[4], config[5]]
+					row_to_csv.append(config_path.split('_')[1]) # GLRP				
+					row_to_csv.append(config_path.split('_')[2]) # MP
+					row_to_csv.append(config_path.split('_')[3]) # ALRP
+					row_to_csv.append(config_path.split('_')[4]) # Viterbi factor
+					seeds,fakes = get_fakes(experiment1_files, folder, config_path)
+
+					locations_per_time = seed_locations_per_time(seeds, int(config[2]), int(config[1]))
+
+					for i in range(len(seeds)):
+						print 'calculating metrics for configurate {} user {}'.format(row_to_csv, i+1)
+						seed = seeds[i]
+						# fetching fakes
+						for j in range(len(fakes.get(i+1))):
+							fake = fakes.get(i+1)[j]
+							gen_distance = distance_bw_traces(seed, fake)
+							distance_covered = trace_distance(fake)
+							surge = surge_factor(fake, int(config[2]), locations_per_time, int(config[1]))
+							row_to_csv.append(gen_distance)
+							row_to_csv.append(distance_covered)
+							row_to_csv.append(surge)
+							print row_to_csv
+							rf_writer.writerow(row_to_csv)
+							row_to_csv = row_to_csv[:-3]
+		# break
 
 calculate_metrics()
