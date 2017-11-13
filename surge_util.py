@@ -1,6 +1,6 @@
 # given an input.trace file return an array containing locations in all the seeds for each time instant.
 from __future__ import division
-import simpy, os, datetime, random, simplejson, urllib
+import simpy, os, datetime, random, simplejson, urllib, numpy
 
 # UbuntuPath
 experiment1_files = '/home/vshejwalkar/Documents/Synthetic Data Generation/Geolife Trajectories 1.3/sltg_exp1/'
