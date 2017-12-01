@@ -36,23 +36,6 @@ def distances(location_file_path):
 		for line in lf:
 			line_split = line.split(',')
 			locations.append([float(line_split[0]), float(line_split[1])])
-	
-	# print locations
-
-	# distances = [[0 for i in range(len(locations))] for j in range(len(locations))]
-	# for i in range(len(locations)):
-	# 	origin = str(locations[i][1]) + ',' + str(locations[i][0])
-	# 	destinations = '%7C'
-	# 	for k in range(i+1, len(locations)):
-	# 		destination = str(locations[k][1]) + '%2C' + str(locations[k][0]) + '%7C'
-	# 		destinations += destination
-	# 	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins={}&destinations={}{}'.format(origin, destinations, api_key)
-	# 	print url
-	# 	result = simplejson.load(urllib.urlopen(url))
-	# 	distances[i][i] = 0
-	# 	for j in range(len(result.get('rows')[0].get('elements'))):
-	# 		distances[i][i+j+1] = distances[i+j+1][i] = (result.get('rows')[0].get('elements')[j].get('distance').get('value'))
-	# 	break
 
 	# print distances
 	for i in range(len(locations)-1):
